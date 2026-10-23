@@ -1,0 +1,149 @@
+version: v0.4
+project:
+  name: The Missing Lin(ni)k
+  description: 'Current manuscript: one-parameter triangular van Dijk anti-concentration,
+    effective Proposition 2, Linnik via the earlier symmetry proof, and the sharpened
+    Selberg sieve with z^(3h) additive error.'
+  authors:
+  - OpenAI Codex, working at Paul Pollack's request
+  license: Not specified; no distribution license is asserted
+repository:
+  role: substantive-development
+sources:
+- title: THE MISSING LIN(NI)K
+  authors:
+  - Paul Pollack
+  type: manuscript
+  id: THE MISSING LIN(NI)K, manuscript snapshot identified by manuscript_sha256
+  location: Theorem 1, Proposition 2, and Appendices 1 and 2
+  relationship: formalizes
+  author_endorsement: participated
+  note: The author requested this development; this does not assert his approval of
+    the resulting code.
+- title: On Landau–Siegel zeros
+  authors:
+  - Ben Green
+  type: article
+  id: https://hexagonmath.org/pdf/2610.00311v2
+  relationship: adapts
+  author_endorsement: not-contacted
+  note: Intended adaptation to all x above an effective conductor power, as required
+    by Proposition 2.
+- title: A Frobenius determinant proof of the non-existence of Landau–Siegel zeros
+  authors:
+  - R. van Dijk
+  type: article
+  id: https://hexagonmath.org/pdf/2610.00409v1
+  relationship: adapts
+  author_endorsement: not-contacted
+  note: Read from the author's PDF supplied by the user. The intended adaptation uses
+    the largest inert prime below x and derives the weighted prime bound directly,
+    without assuming a hypothetical exceptional zero.
+- title: A direct argument for Linnik's theorem
+  type: working note
+  id: User-supplied document (4).pdf
+  location: Section 3, triangular determinant variant
+  relationship: adapts
+  author_endorsement: n/a
+  note: User requested this as a third proof of Proposition 2; no authorship is inferred
+    from the upload.
+- title: 'Multiplicative Number Theory I: Classical Theory'
+  authors:
+  - Hugh L. Montgomery
+  - Robert C. Vaughan
+  type: book
+  id: https://personal.science.psu.edu/rcv4/personal/Publications/MNTI/13.0_pp_282_325_Primitive_characters_and_Gauss_sums.pdf
+  location: Section 9.3, Theorem 9.13
+  relationship: adapts
+  author_endorsement: not-contacted
+  note: 'Completed replacement bridge: local classification at odd prime powers and
+    powers of 2, quadratic reciprocity, and CRT assembly. The main proofs now use
+    this bridge. Mathlib may use Gauss sums internally in its reciprocity theorem.'
+automation:
+  methods:
+  - method: agent
+    framework: Codex
+    tool_setup: Lean 4.35.0-rc3; pinned mathlib; iterative elaboration with autoImplicit
+      disabled.
+    prompting_notes: The user requested reuse of the prior van Dijk formalization
+      to verify the revised paper, followed by updated Comparator checks and metadata.
+status:
+  scope: New proofs and reused dependencies compile without placeholders. ChallengeCurrent.lean
+    has four deliberate statement-only placeholders, excluded from the proof sorry
+    count.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: &id001
+  - propext
+  - Classical.choice
+  - Quot.sound
+  main_results:
+  - declaration: MissingLinnik.CurrentPaper.one_parameter
+    file: OneParameter.lean
+    sorry_count: 0
+    axioms: *id001
+    comparator_config: comparator-current.json
+    literature_dependencies: []
+    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
+      Comparator export comparison passed.
+  - declaration: MissingLinnik.CurrentPaper.proposition_two_effective
+    file: CurrentPaper.lean
+    sorry_count: 0
+    axioms: *id001
+    comparator_config: comparator-current.json
+    literature_dependencies: []
+    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
+      Comparator export comparison passed.
+  - declaration: MissingLinnik.CurrentPaper.linnik
+    file: CurrentPaper.lean
+    sorry_count: 0
+    axioms: *id001
+    comparator_config: comparator-current.json
+    literature_dependencies: []
+    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
+      Comparator export comparison passed.
+  - declaration: MissingLinnik.CurrentPaper.rough_numbers_sieve
+    file: SharpRough.lean
+    sorry_count: 0
+    axioms: *id001
+    comparator_config: comparator-current.json
+    literature_dependencies: []
+    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
+      Comparator export comparison passed.
+review:
+  status: Lean-checked; independent kernel replay and fresh Comparator accepted for
+    all four listed results
+  notes: Native Windows Lean 4.35.0-rc3 compiled the additions and exported their
+    dependencies. Independent leanchecker replay accepted both final proof chains.
+    Comparator uses export mode in Ubuntu WSL with its normal sandbox. No fresh Linux
+    source rebuild or human peer review is asserted. Comparator returned exit code
+    0 and Your solution is okay! for the current challenge and solution exports.
+alignment:
+  statements:
+  - source: Appendix 1
+    challenge: ChallengeCurrent.lean
+    declaration: MissingLinnik.CurrentPaper.one_parameter
+    status: proved
+  - source: Proposition 2
+    challenge: ChallengeCurrent.lean
+    declaration: MissingLinnik.CurrentPaper.proposition_two_effective
+    status: proved
+  - source: Theorem 1
+    challenge: ChallengeCurrent.lean
+    declaration: MissingLinnik.CurrentPaper.linnik
+    status: proved
+  - source: Appendix 2
+    challenge: ChallengeCurrent.lean
+    declaration: MissingLinnik.CurrentPaper.rough_numbers_sieve
+    status: proved
+  effectivity: one_parameter gives coefficient 1/2+70000/t for x>=f^(t^2); exponent(k)=(70000*(k+1))^2
+    is proved computable.
+  outstanding: []
+  proof_fidelity: The triangular proof reuses prior minor, divisibility and size estimates,
+    improves the slope error to linear, and uses internal slope 1024t. The main proof
+    retains prior von Mangoldt weights and sufficient earlier sieve constants. The
+    sharpened R^2 and z^(3h) estimates are separately proved. The sieve theorem uses
+    integer parameters and 0<=n<N; arbitrary real endpoint and parameter conversions
+    are not separately packaged. See VERIFICATION.txt.
+manuscript_sha256: 45828BD8AC1C715EA9FBCB5D54D81B8B62D4B143284988FB15A267B7B92636BF
+
