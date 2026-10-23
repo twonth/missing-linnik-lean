@@ -3,7 +3,9 @@ project:
   name: The Missing Lin(ni)k
   description: 'Current manuscript: one-parameter triangular van Dijk anti-concentration,
     effective Proposition 2, Linnik via the earlier symmetry proof, and the sharpened
-    Selberg sieve with z^(3h) additive error.'
+    Selberg sieve with z^(3h) additive error. The 23 October recertification explicitly
+    checks the unrestricted-x quantitative symmetry estimates underlying Proposition
+    3.'
   authors:
   - OpenAI Codex, working at Paul Pollack's request
   license: Not specified; no distribution license is asserted
@@ -14,8 +16,8 @@ sources:
   authors:
   - Paul Pollack
   type: manuscript
-  id: THE MISSING LIN(NI)K, manuscript snapshot identified by manuscript_sha256
-  location: Theorem 1, Proposition 2, and Appendices 1 and 2
+  id: paper/main.tex (SHA-256 recorded in manuscript_sha256)
+  location: Theorem 1, Propositions 2 and 3, and Appendices 1 and 2
   relationship: formalizes
   author_endorsement: participated
   note: The author requested this development; this does not assert his approval of
@@ -38,7 +40,8 @@ sources:
   author_endorsement: not-contacted
   note: Read from the author's PDF supplied by the user. The intended adaptation uses
     the largest inert prime below x and derives the weighted prime bound directly,
-    without assuming a hypothetical exceptional zero.
+    without assuming a hypothetical exceptional zero. This records the original adapted
+    source; the current manuscript bibliography cites version 2.
 - title: A direct argument for Linnik's theorem
   type: working note
   id: User-supplied document (4).pdf
@@ -67,10 +70,12 @@ automation:
       disabled.
     prompting_notes: The user requested reuse of the prior van Dijk formalization
       to verify the revised paper, followed by updated Comparator checks and metadata.
+      The author requested recertification and publication against the latest primitive-character
+      manuscript, emphasizing the expanded x>=Z range in Proposition 3.
 status:
-  scope: New proofs and reused dependencies compile without placeholders. ChallengeCurrent.lean
-    has four deliberate statement-only placeholders, excluded from the proof sorry
-    count.
+  scope: All 163 project Lean modules freshly compiled against cached pinned mathlib
+    dependencies. The six deliberate statement-only placeholders in ChallengeCurrent.lean
+    are excluded from the solution sorry count.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: &id001
@@ -84,40 +89,56 @@ status:
     axioms: *id001
     comparator_config: comparator-current.json
     literature_dependencies: []
-    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
-      Comparator export comparison passed.
+    verification: Fresh native Lean compilation, independent exported-proof kernel
+      replay, and sandboxed Comparator export comparison passed on 23 October 2026.
   - declaration: MissingLinnik.CurrentPaper.proposition_two_effective
     file: CurrentPaper.lean
     sorry_count: 0
     axioms: *id001
     comparator_config: comparator-current.json
     literature_dependencies: []
-    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
-      Comparator export comparison passed.
+    verification: Fresh native Lean compilation, independent exported-proof kernel
+      replay, and sandboxed Comparator export comparison passed on 23 October 2026.
   - declaration: MissingLinnik.CurrentPaper.linnik
     file: CurrentPaper.lean
     sorry_count: 0
     axioms: *id001
     comparator_config: comparator-current.json
     literature_dependencies: []
-    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
-      Comparator export comparison passed.
+    verification: Fresh native Lean compilation, independent exported-proof kernel
+      replay, and sandboxed Comparator export comparison passed on 23 October 2026.
   - declaration: MissingLinnik.CurrentPaper.rough_numbers_sieve
     file: SharpRough.lean
     sorry_count: 0
     axioms: *id001
     comparator_config: comparator-current.json
     literature_dependencies: []
-    verification: Lean elaboration, independent kernel replay, and fresh sandboxed
-      Comparator export comparison passed.
+    verification: Fresh native Lean compilation, independent exported-proof kernel
+      replay, and sandboxed Comparator export comparison passed on 23 October 2026.
+  - declaration: MissingLinnik.CurrentPaper.symmetry_two_unbounded
+    file: CurrentPaper.lean
+    sorry_count: 0
+    axioms: *id001
+    comparator_config: comparator-current.json
+    literature_dependencies: []
+    verification: Passed on 23 October 2026; quantitative von Mangoldt counterpart
+      of Proposition 3, with no upper bound on x.
+  - declaration: MissingLinnik.CurrentPaper.symmetry_three_unbounded
+    file: CurrentPaper.lean
+    sorry_count: 0
+    axioms: *id001
+    comparator_config: comparator-current.json
+    literature_dependencies: []
+    verification: Passed on 23 October 2026; quantitative von Mangoldt counterpart
+      of Proposition 3, with no upper bound on x.
 review:
-  status: Lean-checked; independent kernel replay and fresh Comparator accepted for
-    all four listed results
-  notes: Native Windows Lean 4.35.0-rc3 compiled the additions and exported their
-    dependencies. Independent leanchecker replay accepted both final proof chains.
-    Comparator uses export mode in Ubuntu WSL with its normal sandbox. No fresh Linux
-    source rebuild or human peer review is asserted. Comparator returned exit code
-    0 and Your solution is okay! for the current challenge and solution exports.
+  status: Fresh source compilation, kernel replay, and sandboxed Comparator accepted
+    all six listed declarations on 23 October 2026
+  notes: All 163 project modules were rebuilt natively with Lean 4.35.0-rc3, using
+    cached pinned mathlib and package dependencies; no prior project oleans were used.
+    Fresh exports of the six declarations passed independent leanchecker replay and
+    the normal WSL Comparator sandbox. No clean Linux source rebuild or human peer
+    review is asserted. See Verification/2026-10-23/ and Verification/manuscript-alignment.md.
 alignment:
   statements:
   - source: Appendix 1
@@ -136,6 +157,14 @@ alignment:
     challenge: ChallengeCurrent.lean
     declaration: MissingLinnik.CurrentPaper.rough_numbers_sieve
     status: proved
+  - source: Proposition 3 (quantitative von Mangoldt counterpart)
+    challenge: ChallengeCurrent.lean
+    declaration: MissingLinnik.CurrentPaper.symmetry_two_unbounded
+    status: proved
+  - source: Proposition 3 (quantitative von Mangoldt counterpart)
+    challenge: ChallengeCurrent.lean
+    declaration: MissingLinnik.CurrentPaper.symmetry_three_unbounded
+    status: proved
   effectivity: one_parameter gives coefficient 1/2+70000/t for x>=f^(t^2); exponent(k)=(70000*(k+1))^2
     is proved computable.
   outstanding: []
@@ -144,6 +173,12 @@ alignment:
     retains prior von Mangoldt weights and sufficient earlier sieve constants. The
     sharpened R^2 and z^(3h) estimates are separately proved. The sieve theorem uses
     integer parameters and 0<=n<N; arbitrary real endpoint and parameter conversions
-    are not separately packaged. See VERIFICATION.txt.
-manuscript_sha256: 45828BD8AC1C715EA9FBCB5D54D81B8B62D4B143284988FB15A267B7B92636BF
-
+    are not separately packaged. See VERIFICATION.txt. The two additional Comparator
+    targets retain von Mangoldt weights and use B=170k. A general prime-only restatement
+    of Proposition 3 and arbitrary-integer-B packaging are not separate formal theorems.
+    The character bridge uses a bounded integer representative rather than identifying
+    the manuscript's exact fundamental discriminant. See Verification/manuscript-alignment.md.
+  unbounded_x: symmetry_two_unbounded holds for x>=1; symmetry_three_unbounded for
+    x>=Y, where Y=q^(170k). There is no upper restriction on x. With B=170k and Z=q^(B^2),
+    log(Y)/log(x)<=1/B for every x>=Z.
+manuscript_sha256: 2269410ba44813446435e2495bf15f21cf94557f5c481e6af309c324d01e3ced

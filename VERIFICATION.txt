@@ -1,126 +1,70 @@
-LEAN VERIFICATION OF THE CURRENT MISSING LIN(NI)K DRAFT
-22 October 2026
+LEAN RECERTIFICATION OF THE MISSING LIN(NI)K
+23 October 2026
 
 MANUSCRIPT
-The verified manuscript snapshot is identified by the following hash.
-SHA-256: 45828BD8AC1C715EA9FBCB5D54D81B8B62D4B143284988FB15A267B7B92636BF
-The manuscript has not been edited during this verification.
+The exact latest uploaded manuscript is paper/main.tex.
+SHA-256: 2269410ba44813446435e2495bf15f21cf94557f5c481e6af309c324d01e3ced
+The open manuscript was not edited during this verification.
 
-NEW RESULTS CHECKED BY LEAN
+RESULTS
+All 163 project Lean modules freshly compiled with Lean 4.35.0-rc3,
+autoImplicit=false, using cached pinned mathlib/package dependencies.
+No previous project oleans were on the build search path.
+The modified top-level modules were explicitly rechecked after the build;
+source-recheck.json reconciles the source hashes with the compiled versions.
 
-1. Appendix 1: one-parameter anti-concentration.
-   OneParameter.lean, MissingLinnik.CurrentPaper.one_parameter:
-   for integers t >= 3 and f >= 2, a primitive real Dirichlet character
-   psi of conductor f, and real x >= f^(t^2),
-
-     sum_{p <= x, psi(p) = -1} log(p)/p
-       <= (1/2 + 70000/t) log(x).
-
-   This proves the stated O(1/t) assertion with an absolute effective
-   constant. The numerical constant is deliberately not optimized.
-
-   LinearTriangle.lean reuses the previous triangular van Dijk
-   nonzero-minor, divisibility, and determinant estimates. The old
-   final bound had an unnecessarily quadratic error in the slope.
-   The revised last estimate has linear error 32Y. OneParameter.lean
-   chooses Y = 1024t and handles the prime 2 and real cutoffs explicitly.
-   This fixed rescaling is the only change of parameter convention;
-   there is still only one freely chosen parameter.
-
-2. Proposition 2 and Theorem 1.
-   CurrentPaper.lean establishes effective anti-concentration with
-   computable exponent A(k) = (70000(k+1))^2, then the arbitrary-epsilon
-   statement and Linnik's theorem. The final theorem now uses the
-   triangular van Dijk route, rather than the previous Green route.
-
-   The existing formalization supplies the symmetry-formula argument,
-   Parseval and cubic identities, extraction of a real character,
-   exclusion of its positive bias, and the concluding contradiction.
-   These are proved ingredients, not hypotheses left to the reader.
-
-3. Appendix 2: sharper Selberg sieve.
-   SharpSieve.lean proves |sieveWeight P R d| <= 1, hence the L1 bound
-   <= R and the progression upper bound with additive error R^2.
-   SharpUpper.lean and SharpLower.lean propagate this through both
-   sides of the finite sieve. SharpFundamental.lean and SharpRough.lean
-   give the rough-number count with relative error
-
-     16 exp(32-h)
-
-   and additive error z^(3h), for integer h >= 17 and z >= max(2,q).
-   This replaces the previous formalization's conservative z^(5h).
-
-PROOF CORRESPONDENCE AND SCOPE
-
-This is a formal verification of the mathematical results using the
-paper's proof ingredients, not a literal translation of every sentence.
-The main proof retains the previous formalization's von Mangoldt weights
-until its later removal of proper prime powers. It also retains its
-previous, sufficient rough-number constants internally. The sharper
-Appendix 2 estimates are separately proved here.
-
-The sieve count uses natural integer parameters and the interval
-0 <= n < N. The manuscript uses positive n <= t and asymptotic notation.
-The usual endpoint and integer-rounding translations are not packaged
-as a separate theorem for arbitrary real t, z, h in this supplement.
-The exact formal statements can be read in SharpSieve.lean and
-SharpRough.lean. No claim is made to verification of bibliographical
-or historical assertions.
-
-AXIOM AND SOURCE AUDIT
-
-Audit.lean checks the dependencies of the one-parameter theorem,
-effective Proposition 2, Linnik's theorem, the coefficient bound,
-the R^2 sieve upper bound, and the z^(3h) rough-number bound.
-All list only propext, Classical.choice, and Quot.sound.
-Excluding the statement-only ChallengeCurrent.lean, there are no sorry, admit, added axioms, or unsafe declarations in
-these proof sources or the bundled MissingLinnik source modules.
-Compiler warnings concern unused variables or redundant tactics only.
-
-REPRODUCTION
-
-Pinned Lean: leanprover/lean4:v4.35.0-rc3.
-Pinned mathlib: 3f6737de4761ec7bf368491fe9faccc991ebd6ca.
-The MissingLinnik directory contains the reused prior proof sources.
-PRIOR_PROOF_MAP.txt describes those modules; its references to the old
-final Green assembly and old z^(5h) bound describe the prior project.
-The files listed above are the replacements/additions for this draft.
-
-With the pinned toolchain and dependencies installed, run:
-  lake build CurrentPaper SharpRough Audit
-
-Compilation logs and the axiom audit are in Verification/.
-Independent exported-proof replay results are recorded separately there.
-INDEPENDENT REPLAY: PASSED
-
-Both exported dependency closures were accepted by leanchecker:
+Fresh Audit and ChallengeCurrent exports include six Comparator targets:
+  MissingLinnik.CurrentPaper.one_parameter
+  MissingLinnik.CurrentPaper.proposition_two_effective
   MissingLinnik.CurrentPaper.linnik
   MissingLinnik.CurrentPaper.rough_numbers_sieve
+  MissingLinnik.CurrentPaper.symmetry_two_unbounded
+  MissingLinnik.CurrentPaper.symmetry_three_unbounded
 
-Each replay returned exit code 0 and reported:
-  Lean default kernel accepts the solution
+The solution export passed independent native leanchecker replay.
+The normal sandboxed Comparator in Ubuntu WSL accepted all six statements,
+returned exit code 0, and reported "Your solution is okay!".
+Only propext, Classical.choice, and Quot.sound are permitted and reported.
+ChallengeCurrent.lean has six intentional statement-only sorry placeholders;
+the solution modules have none. The metadata passes the bundled v0.4 schema.
 
-The Linnik closure includes the newly proved one-parameter estimate;
-the rough-number closure includes the new sharp coefficient estimate.
-This was a fresh native leanexport/leanchecker replay. A subsequent
-Comparator check is recorded below.
+PROPOSITION 3 AND PROOF CORRESPONDENCE
+The new targets explicitly have NO UPPER BOUND ON x. They retain the
+existing von Mangoldt formulation: the two-term estimate holds for x>=1,
+and the three-term estimate for x>=Y=q^(170k). Their quantitative errors
+are 10^42 log(Y)log(x)/phi(q) and 10^46 log(Y)log(x)^2/phi(q).
+For B=170k and Z=q^(B^2), log(Y)/log(x)<=1/B throughout x>=Z.
 
-COMPARATOR: PASSED (22 October 2026)
+These are quantitative counterparts underlying the paper's Proposition 3,
+not separately packaged prime-only statements for every integer B.
+The existing prime-power tail bound also has no upper cutoff. The precise
+correspondence and limitations are in Verification/manuscript-alignment.md.
 
-The fresh Comparator run checked all four declarations in
-comparator-current.json against ChallengeCurrent.lean.
-It ran in Ubuntu WSL with the normal sandbox, using Windows-generated
-exports. Comparator returned exit code 0 and reported:
-  Lean default kernel accepts the solution
-  Your solution is okay!
+The prior conventions remain: internal triangular slope 1024t; explicit
+one-parameter coefficient 1/2+70000/t; computable exponent (70000(k+1))^2;
+bounded integer character representative rather than the exact fundamental
+discriminant; the original sufficient sieve constants in the main proof;
+the sharper appendix sieve proved separately for natural parameters and
+0<=n<N. Arbitrary-real sieve parameter/endpoint conversions are not separately
+packaged. Bibliographical and historical claims are not formally checked.
 
-The calling shell subsequently encountered a CRLF-related exit-command
-error, after recording Comparator's successful exit code. That wrapper
-line-ending issue has been corrected; it did not affect the comparison.
-
-formalization.yaml now records this run and passes the v0.4 JSON schema.
-The challenge has intentional statement placeholders; the solution has
-none. Export hashes and the Comparator log are in Verification/.
-To reproduce with the pinned environment, run:
+REPRODUCTION AND RECORDS
+Pinned Lean: leanprover/lean4:v4.35.0-rc3.
+Pinned mathlib: 3f6737de4761ec7bf368491fe9faccc991ebd6ca.
+  lake exe cache get
+  lake build CurrentPaper SharpRough Audit
   python Verification/export_for_comparator.py
 
+The script reads the target names from comparator-current.json.
+Run it in an environment supporting the pinned Comparator sandbox.
+This recorded run used native Windows compilation/exports and WSL Comparator,
+not a clean Linux source rebuild.
+
+All fresh module logs, build results, source hashes, axiom output,
+kernel/Comparator exits, export hashes, and schema validation records are in
+Verification/2026-10-23/. Prior top-level per-module logs are historical;
+the dated folder is authoritative for this recertification. The previous
+report and Comparator records are preserved in Verification/2026-10-22/.
+Comparator checks explicit Lean challenge statements and axiom dependencies;
+it does not independently interpret the manuscript. No additional human
+peer-review claim is made.
