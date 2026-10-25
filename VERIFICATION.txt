@@ -1,70 +1,59 @@
 LEAN RECERTIFICATION OF THE MISSING LIN(NI)K
-23 October 2026
+25 October 2026
 
 MANUSCRIPT
-The exact latest uploaded manuscript is paper/main.tex.
-SHA-256: 2269410ba44813446435e2495bf15f21cf94557f5c481e6af309c324d01e3ced
-The open manuscript was not edited during this verification.
+Latest October 25 upload from the author's Final Version Review chat,
+Pasted text(20261025-215914).txt, copied byte-for-byte to paper/main.tex.
+SHA-256: 94bd4b7a846a2c5cdf5938aa4fe915f7f7bbd6cdab4309a66752663679b1e997
+The older local editor draft was not used as the current manuscript.
 
 RESULTS
 All 163 project Lean modules freshly compiled with Lean 4.35.0-rc3,
-autoImplicit=false, using cached pinned mathlib/package dependencies.
-No previous project oleans were on the build search path.
-The modified top-level modules were explicitly rechecked after the build;
-source-recheck.json reconciles the source hashes with the compiled versions.
+autoImplicit=false, against cached pinned mathlib/package dependencies.
+No prior project oleans were used for this full build. Source hashes and
+post-build rechecks reconcile the changed files with the compiled versions.
+Fresh Audit and ChallengeCurrent exports passed independent native
+leanchecker replay and the normal Ubuntu WSL Comparator sandbox.
+Comparator exit code: 0. Result: "Your solution is okay!".
+Eight targets: one_parameter, proposition_two_effective, linnik,
+rough_numbers_sieve, symmetry_two_unbounded, symmetry_three_unbounded,
+negative_mass_sign_bound, and rough_numbers_sieve_real_h, all in
+MissingLinnik.CurrentPaper. Only propext, Classical.choice, and Quot.sound
+are permitted and reported. Solution sorry count: zero. ChallengeCurrent
+has eight intentional statement-only placeholders and is not imported by
+the solutions. formalization.yaml validates against the bundled v0.4 schema.
 
-Fresh Audit and ChallengeCurrent exports include six Comparator targets:
-  MissingLinnik.CurrentPaper.one_parameter
-  MissingLinnik.CurrentPaper.proposition_two_effective
-  MissingLinnik.CurrentPaper.linnik
-  MissingLinnik.CurrentPaper.rough_numbers_sieve
-  MissingLinnik.CurrentPaper.symmetry_two_unbounded
-  MissingLinnik.CurrentPaper.symmetry_three_unbounded
+MANUSCRIPT CHANGES INCORPORATED
+The positive-bias exclusion now directly bounds negative single and pair
+mass. The new finite bound and the unsigned-minus-signed identity are
+proved in SignExclusion.lean; positive_sign_excluded uses them, and the
+Linnik proof continues through that declaration. The normalized estimate
+is U_- + V_- <= 3 M_-, using total prime weight 1. The manuscript writes
+the unnormalized estimate M_- log Z + 2 M_- total prime weight.
+The real-h sieve statement is proved for h>=18 by applying the integer
+statement at floor(h): relative error 16 exp(33-h), additive z^(3h).
+The roadmap, explicit reverse-triangle step, p not dividing q condition,
+and exposition/reference/disclosure changes are recorded in the alignment
+report and whitespace-normalized manuscript diff.
 
-The solution export passed independent native leanchecker replay.
-The normal sandboxed Comparator in Ubuntu WSL accepted all six statements,
-returned exit code 0, and reported "Your solution is okay!".
-Only propext, Classical.choice, and Quot.sound are permitted and reported.
-ChallengeCurrent.lean has six intentional statement-only sorry placeholders;
-the solution modules have none. The metadata passes the bundled v0.4 schema.
+SCOPE
+The unrestricted-x symmetry targets retain von Mangoldt weights and use
+B=170k; a general prime-only formulation for arbitrary integer B is not a
+separate theorem. The sieve still uses integer z and 0<=n<N. Arbitrary
+real z and positive-integer endpoint conversions are not separately
+packaged. Internal determinant slope is 1024t; the character bridge uses
+a bounded representative rather than the manuscript's exact fundamental
+discriminant. The main proof retains its earlier sufficient sieve constants.
+Comparator checks explicit Lean statements, not TeX, historical claims,
+or bibliography. No human peer-review claim is made.
 
-PROPOSITION 3 AND PROOF CORRESPONDENCE
-The new targets explicitly have NO UPPER BOUND ON x. They retain the
-existing von Mangoldt formulation: the two-term estimate holds for x>=1,
-and the three-term estimate for x>=Y=q^(170k). Their quantitative errors
-are 10^42 log(Y)log(x)/phi(q) and 10^46 log(Y)log(x)^2/phi(q).
-For B=170k and Z=q^(B^2), log(Y)/log(x)<=1/B throughout x>=Z.
-
-These are quantitative counterparts underlying the paper's Proposition 3,
-not separately packaged prime-only statements for every integer B.
-The existing prime-power tail bound also has no upper cutoff. The precise
-correspondence and limitations are in Verification/manuscript-alignment.md.
-
-The prior conventions remain: internal triangular slope 1024t; explicit
-one-parameter coefficient 1/2+70000/t; computable exponent (70000(k+1))^2;
-bounded integer character representative rather than the exact fundamental
-discriminant; the original sufficient sieve constants in the main proof;
-the sharper appendix sieve proved separately for natural parameters and
-0<=n<N. Arbitrary-real sieve parameter/endpoint conversions are not separately
-packaged. Bibliographical and historical claims are not formally checked.
-
-REPRODUCTION AND RECORDS
-Pinned Lean: leanprover/lean4:v4.35.0-rc3.
-Pinned mathlib: 3f6737de4761ec7bf368491fe9faccc991ebd6ca.
+REPRODUCTION
+Lean: leanprover/lean4:v4.35.0-rc3
+mathlib: 3f6737de4761ec7bf368491fe9faccc991ebd6ca
   lake exe cache get
   lake build CurrentPaper SharpRough Audit
   python Verification/export_for_comparator.py
-
-The script reads the target names from comparator-current.json.
-Run it in an environment supporting the pinned Comparator sandbox.
-This recorded run used native Windows compilation/exports and WSL Comparator,
-not a clean Linux source rebuild.
-
-All fresh module logs, build results, source hashes, axiom output,
-kernel/Comparator exits, export hashes, and schema validation records are in
-Verification/2026-10-23/. Prior top-level per-module logs are historical;
-the dated folder is authoritative for this recertification. The previous
-report and Comparator records are preserved in Verification/2026-10-22/.
-Comparator checks explicit Lean challenge statements and axiom dependencies;
-it does not independently interpret the manuscript. No additional human
-peer-review claim is made.
+This run used Windows compilation and exports followed by WSL Comparator;
+it is not a clean Linux source rebuild. Existing pinned software sufficed.
+Dated logs, source/export hashes, build results and schema validation:
+Verification/2026-10-25/. Earlier run records are retained.

@@ -1,61 +1,71 @@
 # The Missing Lin(ni)k — Lean formalization
 
-Lean proofs accompanying Paul Pollack's *The Missing Lin(ni)k*.
+Lean proofs accompanying Paul Pollack's manuscript *The Missing Lin(ni)k*, an elementary proof of Linnik's theorem using Selberg symmetry formulas and quadratic-character anti-concentration.
 
-This repository contains the one-parameter triangular van Dijk argument for quadratic-character anti-concentration, its assembly into Linnik's theorem using the symmetry-formula argument, and a sharpened Selberg sieve estimate.
+**Linnik's theorem:** there is an absolute, effectively computable constant L such that, for every integer q ≥ 2 and every a coprime to q, some prime p ≡ a (mod q) satisfies p ≤ q^L.
 
-The complete source tree, reviewed manuscript, and verification records are provided in [missing-linnik-lean.zip](missing-linnik-lean.zip). Extract it before building; source paths below refer to the extracted directory. The reviewed manuscript is `paper/main.tex`.
+The repository is distributed as a [source archive](missing-linnik-lean.zip). It contains the Lean source tree, the manuscript (`paper/main.tex`), build configuration, and verification records. The files visible at the repository root summarize that package. [Download the archive](missing-linnik-lean.zip) and extract it before using the source paths or commands below. Its SHA-256 checksum is in [missing-linnik-lean.zip.sha256](missing-linnik-lean.zip.sha256).
 
-## Main results
+## Formalized results
 
-| Paper result | Lean declaration | Source |
+All declarations in this table are in the namespace `MissingLinnik.CurrentPaper`.
+
+| Result | Lean declaration | Source in the archive |
 | --- | --- | --- |
-| Appendix 1: one-parameter bound | `MissingLinnik.CurrentPaper.one_parameter` | `OneParameter.lean` |
-| Effective Proposition 2 | `MissingLinnik.CurrentPaper.proposition_two_effective` | `CurrentPaper.lean` |
-| Theorem 1: Linnik's theorem | `MissingLinnik.CurrentPaper.linnik` | `CurrentPaper.lean` |
-| Proposition 3: unrestricted two-term estimate (von Mangoldt form) | `MissingLinnik.CurrentPaper.symmetry_two_unbounded` | `CurrentPaper.lean` |
-| Proposition 3: unrestricted three-term estimate (von Mangoldt form) | `MissingLinnik.CurrentPaper.symmetry_three_unbounded` | `CurrentPaper.lean` |
-| Appendix 2: rough-number sieve | `MissingLinnik.CurrentPaper.rough_numbers_sieve` | `SharpRough.lean` |
+| Linnik's theorem | `linnik` | `CurrentPaper.lean` |
+| Effective quadratic-character anti-concentration | `proposition_two_effective` | `CurrentPaper.lean` |
+| One-parameter triangular van Dijk bound | `one_parameter` | `OneParameter.lean` |
+| Two-term symmetry estimate, with no upper cutoff on x | `symmetry_two_unbounded` | `CurrentPaper.lean` |
+| Three-term symmetry estimate, with no upper cutoff on x | `symmetry_three_unbounded` | `CurrentPaper.lean` |
+| Negative single and pair mass bound used to exclude positive character bias | `negative_mass_sign_bound` | `CurrentPaper.lean` |
+| Rough-number sieve with integer parameters | `rough_numbers_sieve` | `SharpRough.lean` |
+| Rough-number sieve with real h ≥ 18 | `rough_numbers_sieve_real_h` | `SharpRough.lean` |
 
-The first theorem proves the explicit bound `(1/2 + 70000/t) log x` for `x >= f^(t^2)` and integers `t >= 3`. The constant is not optimized. The sieve theorem has relative error `16 exp(32-h)` and additive error `z^(3h)`.
+The one-parameter theorem gives the explicit bound `(1/2 + 70000/t) log x` for `x ≥ f^(t²)` and integers `t ≥ 3`. The constants are not optimized. The sieve bounds have additive error `z^(3h)` and relative error `16 exp(32-h)` for integer h ≥ 17, or `16 exp(33-h)` for real h ≥ 18.
 
-## Build
+## Build and reproduce the checks
 
-Install Lean through elan, then run from this directory:
+Install Lean through [elan](https://github.com/leanprover/elan), extract the source archive, and run these commands from the extracted directory:
 
 ```sh
 lake exe cache get
 lake build CurrentPaper SharpRough Audit
 ```
 
-The toolchain is pinned to Lean **4.35.0-rc3** and mathlib commit **3f6737de4761ec7bf368491fe9faccc991ebd6ca**. See `lean-toolchain`, `lakefile.toml`, and `lake-manifest.json`.
+The configuration pins Lean **4.35.0-rc3** and mathlib commit **3f6737de4761ec7bf368491fe9faccc991ebd6ca**. See `lean-toolchain`, `lakefile.toml`, and `lake-manifest.json` in the archive.
 
-## Verification
-
-On 23 October 2026, all 163 project Lean modules were freshly compiled against cached pinned dependencies. Fresh exported proofs passed independent kernel replay, and the normal sandboxed Comparator accepted all six declarations above. See the run records (`Verification/2026-10-23/`) and Comparator output (`Verification/comparator-current.log`).
-
-The audited solution declarations depend only on `propext`, `Classical.choice`, and `Quot.sound`. There are no unfinished proofs in the solution modules. `ChallengeCurrent.lean` intentionally contains six statement-only `sorry` placeholders for Comparator; it is not imported by the solutions.
-
-To reproduce the export comparison in an environment supporting the pinned toolchain's Comparator sandbox:
+To export the eight statements and compare their proofs, run Python in an environment supporting the pinned toolchain's Comparator sandbox:
 
 ```sh
 python Verification/export_for_comparator.py
 ```
 
-This builds the challenge and solution, exports their dependencies, and invokes `lake comparator`. The recorded run rebuilt the project sources natively on Windows against cached mathlib dependencies, then used the fresh Windows-generated exports and Ubuntu WSL's normal Comparator sandbox; it was not a clean Linux source rebuild. Export hashes are recorded in `Verification/export-sha256.txt`.
+This script builds the challenge and solution modules, exports their dependencies, and invokes `lake comparator` with `comparator-current.json`.
 
-## Relation to the paper
+## Verification
 
-The formalization reuses the prior triangular van Dijk proof's nonzero-minor, divisibility, and determinant-size arguments, improving the final slope error to linear. Internally it uses slope `1024t`, still with only one free parameter.
+On **25 October 2026**, all **163 project Lean modules** compiled freshly against the cached, pinned dependencies. Fresh exports passed independent kernel replay with `leanchecker`, and the normal sandboxed Comparator accepted all **eight statements** listed above.
 
-The main proof reuses the earlier symmetry-formula development and retains von Mangoldt weights until the final prime-power estimates. Its existing sufficient sieve constants remain in that proof. The sharper appendix sieve is proved separately.
+The recorded run used native Windows compilation and exports, followed by Comparator in Ubuntu WSL. It was not a clean Linux source rebuild. Build results, per-module logs, source and export hashes, and kernel and Comparator outputs are in `Verification/2026-10-25/` inside the archive.
 
-The formal sieve uses integer parameters and the interval `0 <= n < N`. The paper uses asymptotic notation and positive integers `n <= t`; the routine real-parameter and endpoint conversions are not separately packaged here. This is verification of mathematical statements through the indicated proof ingredients, not a literal translation of every line or verification of historical and bibliographical claims.
+The audited solution declarations depend only on `propext`, `Classical.choice`, and `Quot.sound`. Solution modules contain no unfinished proofs. `ChallengeCurrent.lean` contains eight intentional statement-only `sorry` placeholders for Comparator and is not imported by the solutions.
 
-The expanded range **x >= Z with no upper cutoff** is supported by quantitative two- and three-term estimates valid for every x >= 1 and x >= Y, respectively. These formal statements retain von Mangoldt weights and use B = 170k. See the manuscript alignment report (`Verification/manuscript-alignment.md`) for the relation to the paper's prime-only formulas and the precise scope of this verification. Comparator checks Lean statements, not the TeX text itself.
+See [VERIFICATION.txt](VERIFICATION.txt) for the verification report and [formalization.yaml](formalization.yaml) for structured metadata.
 
-See [VERIFICATION.txt](VERIFICATION.txt) for details, [formalization.yaml](formalization.yaml) for structured metadata, and `PRIOR_PROOF_MAP.txt` for the reused modules. The latter describes the earlier project; `CurrentPaper.lean` replaces its final Green-route assembly with the triangular route.
+## Relationship to the manuscript
+
+The formalization checks the mathematical statements and proof ingredients described above. It is not a literal translation of every manuscript line, and Comparator checks Lean statements rather than interpreting TeX.
+
+The proof uses a triangular determinant argument for anti-concentration, two- and three-term symmetry estimates, and a finite character argument assembling them into Linnik's theorem. The sign-exclusion step bounds negative single and pair mass directly. The sharper appendix sieve is proved separately from the sufficient sieve constants used in the main proof.
+
+The precise correspondence has these conventions:
+
+- The symmetry theorems use von Mangoldt weights and `B = 170k`. Prime-power estimates supply the connection to prime sums. A prime-only restatement for every integer B is not a separate formal theorem.
+- The sieve allows real h ≥ 18 but retains integer z and the interval `0 ≤ n < N`. Conversions to arbitrary real z and the manuscript's positive-integer endpoint convention are not separately packaged.
+- The determinant proof uses internal slope `1024t`. The character bridge uses a bounded integer representative rather than identifying the manuscript's exact fundamental discriminant.
+
+`Verification/manuscript-alignment.md` in the archive explains these correspondences. Historical and bibliographical claims are outside the formal verification.
 
 ## Authorship and licensing
 
-The paper is by Paul Pollack. The formalization was developed by OpenAI Codex at his request, reusing the earlier project. No additional claim of human review is made. No distribution license has been specified for these sources; dependency licenses remain their respective owners'.
+The paper is by Paul Pollack. The formalization was developed by OpenAI Codex at his request. No additional claim of human review is made. No distribution license has been specified for these sources; dependency licenses remain their respective owners'.
